@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>CLIENT_ID</key>
+	<string>853774274752-sg2s53v4vbgkechsek5fclhnsig3daha.apps.googleusercontent.com</string>
+	<key>REVERSED_CLIENT_ID</key>
+	<string>com.googleusercontent.apps.853774274752-sg2s53v4vbgkechsek5fclhnsig3daha</string>
+	<key>API_KEY</key>
+	<string>AIzaSyCUEE65pajA3MhsthA3e8yiFN948CTzM20</string>
+	<key>GCM_SENDER_ID</key>
+	<string>853774274752</string>
+	<key>PLIST_VERSION</key>
+	<string>1</string>
+	<key>BUNDLE_ID</key>
+	<string>br.com.challengesnowman</string>
+	<key>PROJECT_ID</key>
+	<string>challengesnowman</string>
+	<key>STORAGE_BUCKET</key>
+	<string>challengesnowman.appspot.com</string>
+	<key>IS_ADS_ENABLED</key>
+	<false></false>
+	<key>IS_ANALYTICS_ENABLED</key>
+	<false></false>
+	<key>IS_APPINVITE_ENABLED</key>
+	<true></true>
+	<key>IS_GCM_ENABLED</key>
+	<true></true>
+	<key>IS_SIGNIN_ENABLED</key>
+	<true></true>
+	<key>GOOGLE_APP_ID</key>
+	<string>1:853774274752:ios:ace6009b0a11691a32dd25</string>
+	<key>DATABASE_URL</key>
+	<string>https://challengesnowman.firebaseio.com</string>
+</dict>
+</plist>

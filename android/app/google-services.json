@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "853774274752",
+    "firebase_url": "https://challengesnowman.firebaseio.com",
+    "project_id": "challengesnowman",
+    "storage_bucket": "challengesnowman.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:853774274752:android:2558cab14532231232dd25",
+        "android_client_info": {
+          "package_name": "br.com.challengesnowman"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "853774274752-m1suiohe59te4btvqkfuaoi08eq48r69.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBrTOgkTyiSgI8Q-v1iyanXjYk33qkwGoM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "853774274752-m1suiohe59te4btvqkfuaoi08eq48r69.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
