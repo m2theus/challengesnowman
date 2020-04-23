@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:challengesnowman/app/modules/tabs/map/tab_map_page.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
@@ -5,7 +7,9 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 class HomePage extends StatefulWidget {
   final String title;
-  const HomePage({Key key, this.title = "Home"}) : super(key: key);
+  final int index;
+  const HomePage({Key key, this.title = "Home", this.index = 1
+  }) : super(key: key);
 
   @override
   _HomePageState createState() => _HomePageState();
@@ -14,7 +18,7 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   GoogleMapController mapController;
   final LatLng _center = const LatLng(45.521563, -122.677433);
-
+  final Key _mapKey = UniqueKey();
   void _onMapCreated(GoogleMapController controller) {
     mapController = controller;
   }
@@ -22,6 +26,7 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(
+      initialIndex: widget.index,
         length: 3,
         child: new Scaffold(
           body: Container(
@@ -32,7 +37,7 @@ class _HomePageState extends State<HomePage> {
                   color: Colors.yellow,
                 ),
                 new Container(
-                  child: TabMapPage(),
+                  child: TabMapPage(key:_mapKey),
                 ),
                 new Container(
                   color: Colors.lightGreen,

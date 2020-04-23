@@ -26,7 +26,109 @@ mixin _$TabMapController on _TabMapBase, Store {
     }, _$isLoadingAtom, name: '${_$isLoadingAtom.name}_set');
   }
 
+  final _$listMarkersAtom = Atom(name: '_TabMapBase.listMarkers');
+
+  @override
+  Set<Marker> get listMarkers {
+    _$listMarkersAtom.context.enforceReadPolicy(_$listMarkersAtom);
+    _$listMarkersAtom.reportObserved();
+    return super.listMarkers;
+  }
+
+  @override
+  set listMarkers(Set<Marker> value) {
+    _$listMarkersAtom.context.conditionallyRunInAction(() {
+      super.listMarkers = value;
+      _$listMarkersAtom.reportChanged();
+    }, _$listMarkersAtom, name: '${_$listMarkersAtom.name}_set');
+  }
+
+  final _$listSpotsAtom = Atom(name: '_TabMapBase.listSpots');
+
+  @override
+  List<SpotModel> get listSpots {
+    _$listSpotsAtom.context.enforceReadPolicy(_$listSpotsAtom);
+    _$listSpotsAtom.reportObserved();
+    return super.listSpots;
+  }
+
+  @override
+  set listSpots(List<SpotModel> value) {
+    _$listSpotsAtom.context.conditionallyRunInAction(() {
+      super.listSpots = value;
+      _$listSpotsAtom.reportChanged();
+    }, _$listSpotsAtom, name: '${_$listSpotsAtom.name}_set');
+  }
+
+  final _$_mapControllerAtom = Atom(name: '_TabMapBase._mapController');
+
+  @override
+  GoogleMapController get _mapController {
+    _$_mapControllerAtom.context.enforceReadPolicy(_$_mapControllerAtom);
+    _$_mapControllerAtom.reportObserved();
+    return super._mapController;
+  }
+
+  @override
+  set _mapController(GoogleMapController value) {
+    _$_mapControllerAtom.context.conditionallyRunInAction(() {
+      super._mapController = value;
+      _$_mapControllerAtom.reportChanged();
+    }, _$_mapControllerAtom, name: '${_$_mapControllerAtom.name}_set');
+  }
+
+  final _$positionAtualAtom = Atom(name: '_TabMapBase.positionAtual');
+
+  @override
+  LatLng get positionAtual {
+    _$positionAtualAtom.context.enforceReadPolicy(_$positionAtualAtom);
+    _$positionAtualAtom.reportObserved();
+    return super.positionAtual;
+  }
+
+  @override
+  set positionAtual(LatLng value) {
+    _$positionAtualAtom.context.conditionallyRunInAction(() {
+      super.positionAtual = value;
+      _$positionAtualAtom.reportChanged();
+    }, _$positionAtualAtom, name: '${_$positionAtualAtom.name}_set');
+  }
+
+  final _$getSpotsByDescAsyncAction = AsyncAction('getSpotsByDesc');
+
+  @override
+  Future getSpotsByDesc(String desc) {
+    return _$getSpotsByDescAsyncAction.run(() => super.getSpotsByDesc(desc));
+  }
+
+  final _$populateSpotsAsyncAction = AsyncAction('populateSpots');
+
+  @override
+  Future populateSpots() {
+    return _$populateSpotsAsyncAction.run(() => super.populateSpots());
+  }
+
   final _$_TabMapBaseActionController = ActionController(name: '_TabMapBase');
+
+  @override
+  dynamic setMapController(GoogleMapController controller) {
+    final _$actionInfo = _$_TabMapBaseActionController.startAction();
+    try {
+      return super.setMapController(controller);
+    } finally {
+      _$_TabMapBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  dynamic movePosition(dynamic lat, dynamic long) {
+    final _$actionInfo = _$_TabMapBaseActionController.startAction();
+    try {
+      return super.movePosition(lat, long);
+    } finally {
+      _$_TabMapBaseActionController.endAction(_$actionInfo);
+    }
+  }
 
   @override
   dynamic showLoading(bool value) {
@@ -39,8 +141,19 @@ mixin _$TabMapController on _TabMapBase, Store {
   }
 
   @override
+  dynamic setMarkers(dynamic markers) {
+    final _$actionInfo = _$_TabMapBaseActionController.startAction();
+    try {
+      return super.setMarkers(markers);
+    } finally {
+      _$_TabMapBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
   String toString() {
-    final string = 'isLoading: ${isLoading.toString()}';
+    final string =
+        'isLoading: ${isLoading.toString()},listMarkers: ${listMarkers.toString()},listSpots: ${listSpots.toString()},positionAtual: ${positionAtual.toString()}';
     return '{$string}';
   }
 }

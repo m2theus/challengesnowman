@@ -22,6 +22,11 @@ class Router {
             settings: settings,
             page: HomePage(),
             transition: Transition.fade);
+      case '/home/map':
+        return GetRoute(
+            settings: settings,
+            page: HomePage(index: 1,),
+            transition: Transition.fade);
       default:
         return GetRoute(
             settings: settings, transition: Transition.fade, page: AppWidget());

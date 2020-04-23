@@ -24,6 +24,7 @@ class SharedPreferencesService {
    closeSession() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     prefs.remove("user");
+    _user = null;
     _isSessionValid.sink.add(false);
   }
 
@@ -33,6 +34,10 @@ class SharedPreferencesService {
     if (_user != null) {
       return _user;
     }
+  }
+
+  getUser() {
+    return _user;
   }
 }
 

@@ -10,19 +10,14 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:provider/provider.dart';
 
 class TabMapPage extends StatefulWidget {
+  TabMapPage({@required Key key}) : super(key: key);
   @override
   _TabMapPageState createState() => _TabMapPageState();
 }
 
 class _TabMapPageState extends State<TabMapPage> {
-  final Completer<GoogleMapController> _mapController = Completer();
   LatLng _positionAtual;
   final _tabMapController = Provider.of<TabMapController>(Get.context);
-
-  Future<void> _onMapCreated(GoogleMapController controller) async {
-    _mapController.complete(controller);
-    await _getUserPosition();
-  }
 
   _getUserPosition() async {
     return await Geolocator()
@@ -34,10 +29,8 @@ class _TabMapPageState extends State<TabMapPage> {
     _tabMapController.showLoading(true);
     super.initState();
     _getUserPosition().then((value) {
-      _positionAtual = LatLng(
-        value.latitude,
-        value.longitude,
-      );
+      _positionAtual = LatLng(value.latitude, value.longitude);
+      _tabMapController.populateSpots();
       _tabMapController.showLoading(false);
     });
   }
@@ -53,11 +46,13 @@ class _TabMapPageState extends State<TabMapPage> {
             : Stack(
                 children: <Widget>[
                   GoogleMap(
-                    onMapCreated: (GoogleMapController controller1) async {
-                      _mapController.complete(controller1);
+                    onMapCreated: (GoogleMapController controller) async {
+                      _tabMapController.setMapController(controller);
+                      await _getUserPosition();
                     },
                     mapToolbarEnabled: false,
                     myLocationEnabled: true,
+                    markers: _tabMapController.listMarkers,
                     myLocationButtonEnabled: false,
                     initialCameraPosition: CameraPosition(
                       target: _positionAtual,
@@ -68,8 +63,7 @@ class _TabMapPageState extends State<TabMapPage> {
                     top: 15,
                     left: 0,
                     right: 0,
-                    child: SearchBox(
-                    ),
+                    child: SearchBox(),
                   ),
                 ],
               );
