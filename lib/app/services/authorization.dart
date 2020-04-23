@@ -1,12 +1,11 @@
 import 'dart:async';
+import 'package:challengesnowman/app/modules/login/components/toast.dart';
 import 'package:challengesnowman/app/modules/models/user_model.dart';
 import 'package:challengesnowman/app/services/firebase_provider.dart';
+import 'package:challengesnowman/app/services/shared_preferences_service.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_facebook_login/flutter_facebook_login.dart';
-
-//enum authProblems { UserNotFound, PasswordNotValid, NetworkError, UnknownError }
 
 class Auth {
   FacebookLogin _facebookLogin = FacebookLogin();
@@ -14,63 +13,89 @@ class Auth {
   FirebaseAuth firebaseAuth = FirebaseAuth.instance;
 
   signInFacebook() async {
-    var result = await _facebookLogin.logIn(['email', 'public_profile']);
-    var credential = FacebookAuthProvider.getCredential(
-        accessToken: result.accessToken.token);
-    AuthResult auth;
-    UserModel user;
+    try {
+      var result = await _facebookLogin.logIn(['email', 'public_profile']);
+      var credential = FacebookAuthProvider.getCredential(
+          accessToken: result.accessToken.token);
+      AuthResult auth;
+      UserModel user;
 
-    switch (result.status) {
-      case FacebookLoginStatus.loggedIn:
-        auth = await firebaseAuth.signInWithCredential(credential);
+      switch (result.status) {
+        case FacebookLoginStatus.loggedIn:
+          auth = await firebaseAuth.signInWithCredential(credential);
 
-        user = UserModel(
-          fullName: auth.user.displayName,
-          email: auth.user.email,
-          photoUrl: auth.user.photoUrl,
-          uid: auth.user.uid,
-        );
+          user = UserModel(
+            fullName: auth.user.displayName,
+            email: auth.user.email,
+            photoUrl: auth.user.photoUrl,
+            uid: auth.user.uid,
+          );
 
-        checkExistUser(firebaseUser: auth.user, user: user);
-        break;
-      case FacebookLoginStatus.cancelledByUser:
-        print("Facebook login cancelled");
-        break;
-      case FacebookLoginStatus.error:
-        print(result.errorMessage);
-        break;
+          await validUser(firebaseUser: auth.user, user: user);
+          break;
+        case FacebookLoginStatus.cancelledByUser:
+          print("Facebook login cancelled");
+          throw ("Facebook login cancelled");
+          break;
+        case FacebookLoginStatus.error:
+          print(result.errorMessage);
+          throw ("Facebook login cancelled");
+          break;
+      }
+      return user;
+    } catch (e) {
+      throw (e);
     }
-    return user;
-//    FirebaseUser user = await FirebaseAuth.instance
-//        .signInWithEmailAndPassword(email: email, password: password);
-//    return user.uid;
   }
 
   signUpFacebook() async {
-    AuthResult auth;
+    try {
+      var result = await _facebookLogin.logIn(['email', 'public_profile']);
+      var credential = FacebookAuthProvider.getCredential(
+          accessToken: result.accessToken.token);
+      AuthResult auth;
+      UserModel user;
 
-    await _facebookLogin.logIn(['email', 'public_profile']).then((value) async {
-      AuthCredential credential = FacebookAuthProvider.getCredential(
-          accessToken: value.accessToken.token);
-      auth = await firebaseAuth.signInWithCredential(credential);
-    });
-    return auth;
+      switch (result.status) {
+        case FacebookLoginStatus.loggedIn:
+          auth = await firebaseAuth.signInWithCredential(credential);
+
+          user = UserModel(
+            fullName: auth.user.displayName,
+            email: auth.user.email,
+            photoUrl: auth.user.photoUrl,
+            uid: auth.user.uid,
+          );
+          bool result = await checkUserExist(user.email);
+          if (!result) {
+            await fireStoreProvider.addUser(user);
+          }
+          break;
+        case FacebookLoginStatus.cancelledByUser:
+          Toast("Login", "Facebook login cancelled", "falha").getSnack();
+          break;
+        case FacebookLoginStatus.error:
+          Toast("Login", result.errorMessage, "falha").getSnack();
+          throw ("Facebook login cancelled");
+          break;
+      }
+      return user;
+    } catch (e) {
+      throw (e);
+    }
   }
 
-  checkExistUser({FirebaseUser firebaseUser, UserModel user}) async {
-    await fireStoreProvider.database
-        .collection('users')
-        .getDocuments()
-        .then((docs) async {
-      if (docs.documents.isEmpty) {
-        fireStoreProvider.addUser(user);
-      } else {
-        bool result = await checkUserExist(user.email);
-        if (result) {
-          fireStoreProvider.addUser(user);
-        }
-      }
-    });
+  signUpFacebookConfirm(UserModel user) async {
+    try {} catch (e) {
+      throw (e);
+    }
+  }
+
+  validUser({FirebaseUser firebaseUser, UserModel user}) async {
+    bool result = await checkUserExist(user.email);
+    if (!result) {
+      throw ("Usuário não encontrado, por favor cadastra-se");
+    }
   }
 
   static Future<void> signOut() async {

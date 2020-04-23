@@ -14,14 +14,14 @@ class SharedPreferencesService {
     _isSessionValid.close();
   }
 
-  void openSession(UserModel user) async {
+   openSession(UserModel user) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     await prefs.setString("user", json.encode(user));
     _user = user;
     _isSessionValid.sink.add(true);
   }
 
-  void closeSession() async {
+   closeSession() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     prefs.remove("user");
     _isSessionValid.sink.add(false);

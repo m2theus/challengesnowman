@@ -1,6 +1,6 @@
-import 'package:challengesnowman/app/app_module.dart';
-import 'package:challengesnowman/app/modules/home/home_module.dart';
-import 'package:challengesnowman/app/modules/login/login_module.dart';
+import 'package:challengesnowman/app/app_widget.dart';
+import 'package:challengesnowman/app/modules/home/home_page.dart';
+import 'package:challengesnowman/app/modules/login/login_page.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 
@@ -9,22 +9,22 @@ class Router {
     switch (settings.name) {
       case '/':
         return GetRoute(
-          page: AppModule(),
+          page: AppWidget(),
           settings: settings,
         );
       case '/login':
         return GetRoute(
             settings: settings,
-            page: LoginModule(),
+            page: LoginPage(),
             transition: Transition.fade);
       case '/home':
         return GetRoute(
             settings: settings,
-            page: HomeModule(),
+            page: HomePage(),
             transition: Transition.fade);
       default:
         return GetRoute(
-            settings: settings, transition: Transition.fade, page: AppModule());
+            settings: settings, transition: Transition.fade, page: AppWidget());
     }
   }
 }

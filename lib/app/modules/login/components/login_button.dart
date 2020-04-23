@@ -3,6 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:provider/provider.dart';
 
 class LoginButton extends StatelessWidget {
   const LoginButton({@required this.isSignInButton});
@@ -11,7 +12,7 @@ class LoginButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final _loginController = LoginController();
+    final _loginController = Provider.of<LoginController>(context);
     return Container(
       margin: EdgeInsets.only(bottom: 20),
       decoration: BoxDecoration(
@@ -25,7 +26,7 @@ class LoginButton extends StatelessWidget {
           child: SizedBox(
             height: 60,
             child: InkWell(
-              onTap: () => _loginController.login(),
+              onTap: () => isSignInButton ? _loginController.login() : _loginController.signUp(),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: <Widget>[
