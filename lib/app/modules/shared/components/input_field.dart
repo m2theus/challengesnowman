@@ -8,7 +8,7 @@ class InputField extends StatelessWidget {
       this.typePassword = false,
       this.onTap,
       this.isColorInput = false,
-      this.colorInputCircle});
+      this.colorInputCircle, this.maxLines = 1 });
 
   var controller;
   var validator;
@@ -19,11 +19,13 @@ class InputField extends StatelessWidget {
   var onTap;
   var isColorInput;
   var colorInputCircle;
+  var maxLines;
   @override
   Widget build(BuildContext context) {
     return Container(
         padding: EdgeInsets.only(left: 20, right: 20, top: 20),
         child: TextFormField(
+            maxLines: maxLines,
             onTap: onTap,
             controller: controller,
             obscureText: obscureText,

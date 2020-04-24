@@ -42,6 +42,7 @@ dependencies:
   simple_autocomplete_search: ^1.0.5
   autocomplete_textfield: ^1.7.3
   flutter_typeahead: ^1.8.0
+  smooth_star_rating: ^1.0.4+2
   hexcolor: ^1.0.1
   flutter:
     sdk: flutter

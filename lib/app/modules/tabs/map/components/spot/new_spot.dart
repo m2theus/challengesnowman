@@ -8,17 +8,14 @@ import 'package:challengesnowman/app/modules/shared/components/input_field.dart'
 import 'package:challengesnowman/app/modules/tabs/map/components/spot/components/image_select.dart';
 import 'package:challengesnowman/app/modules/tabs/map/components/spot/models/model_spot_place.dart';
 import 'package:challengesnowman/app/modules/tabs/map/components/spot/new_spot_controller.dart';
-import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_colorpicker/flutter_colorpicker.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter_typeahead/flutter_typeahead.dart';
 import 'package:get/get.dart';
-import 'package:provider/provider.dart';
-import 'package:search_map_place/search_map_place.dart';
-import 'package:flutter_colorpicker/flutter_colorpicker.dart';
 import 'package:hexcolor/hexcolor.dart';
-import 'package:simple_autocomplete_search/simple_autocomplete_search.dart';
+import 'package:provider/provider.dart';
 
 class NewSpotModal extends StatefulWidget {
   const NewSpotModal();

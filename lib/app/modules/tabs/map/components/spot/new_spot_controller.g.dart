@@ -171,6 +171,47 @@ mixin _$NewSpotController on _NewSpotBase, Store {
     }, _$isLoadingAtom, name: '${_$isLoadingAtom.name}_set');
   }
 
+  final _$ratingMediumAtom = Atom(name: '_NewSpotBase.ratingMedium');
+
+  @override
+  double get ratingMedium {
+    _$ratingMediumAtom.context.enforceReadPolicy(_$ratingMediumAtom);
+    _$ratingMediumAtom.reportObserved();
+    return super.ratingMedium;
+  }
+
+  @override
+  set ratingMedium(double value) {
+    _$ratingMediumAtom.context.conditionallyRunInAction(() {
+      super.ratingMedium = value;
+      _$ratingMediumAtom.reportChanged();
+    }, _$ratingMediumAtom, name: '${_$ratingMediumAtom.name}_set');
+  }
+
+  final _$modelSelectedAtom = Atom(name: '_NewSpotBase.modelSelected');
+
+  @override
+  SpotModel get modelSelected {
+    _$modelSelectedAtom.context.enforceReadPolicy(_$modelSelectedAtom);
+    _$modelSelectedAtom.reportObserved();
+    return super.modelSelected;
+  }
+
+  @override
+  set modelSelected(SpotModel value) {
+    _$modelSelectedAtom.context.conditionallyRunInAction(() {
+      super.modelSelected = value;
+      _$modelSelectedAtom.reportChanged();
+    }, _$modelSelectedAtom, name: '${_$modelSelectedAtom.name}_set');
+  }
+
+  final _$getSpotByIdAsyncAction = AsyncAction('getSpotById');
+
+  @override
+  Future getSpotById(dynamic id) {
+    return _$getSpotByIdAsyncAction.run(() => super.getSpotById(id));
+  }
+
   final _$getCategoriesAsyncAction = AsyncAction('getCategories');
 
   @override
@@ -191,6 +232,13 @@ mixin _$NewSpotController on _NewSpotBase, Store {
   @override
   Future addSpot(PlaceSpot placeSpot, SpotModel spotModel) {
     return _$addSpotAsyncAction.run(() => super.addSpot(placeSpot, spotModel));
+  }
+
+  final _$addCommentAsyncAction = AsyncAction('addComment');
+
+  @override
+  Future addComment(dynamic rating, dynamic comment) {
+    return _$addCommentAsyncAction.run(() => super.addComment(rating, comment));
   }
 
   final _$_NewSpotBaseActionController = ActionController(name: '_NewSpotBase');
@@ -238,7 +286,7 @@ mixin _$NewSpotController on _NewSpotBase, Store {
   @override
   String toString() {
     final string =
-        'predictionsAutoComplete: ${predictionsAutoComplete.toString()},categories: ${categories.toString()},isLoading: ${isLoading.toString()},isImageSelected: ${isImageSelected.toString()},image: ${image.toString()},imageSource: ${imageSource.toString()},imageUrl: ${imageUrl.toString()}';
+        'predictionsAutoComplete: ${predictionsAutoComplete.toString()},categories: ${categories.toString()},isLoading: ${isLoading.toString()},ratingMedium: ${ratingMedium.toString()},modelSelected: ${modelSelected.toString()},isImageSelected: ${isImageSelected.toString()},image: ${image.toString()},imageSource: ${imageSource.toString()},imageUrl: ${imageUrl.toString()}';
     return '{$string}';
   }
 }

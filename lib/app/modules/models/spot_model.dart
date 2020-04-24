@@ -11,8 +11,8 @@ class SpotModel {
   final String photo;
   final CategoriesModel category;
   final String description;
-  final List<CommentModel> comments;
-  final String id;
+  List<CommentModel> comments;
+  String id;
   final String pinColor;
   final double rating;
   final bool isFavorite;
@@ -43,7 +43,7 @@ class SpotModel {
             : null,
         description = json['description'],
         comments = getComments(json['comments']),
-        id = json['id'],
+        id = json['documentID'],
         pinColor = json['pinColor'],
         rating = json['rating'],
         isFavorite = json['isFavorite'];

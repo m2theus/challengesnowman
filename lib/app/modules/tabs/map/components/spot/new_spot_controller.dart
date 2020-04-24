@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:challengesnowman/app/modules/login/components/toast.dart';
 import 'package:challengesnowman/app/modules/models/categories_model.dart';
+import 'package:challengesnowman/app/modules/models/comment.dart';
 import 'package:challengesnowman/app/modules/models/spot_model.dart';
 import 'package:challengesnowman/app/modules/models/user_model.dart';
 import 'package:challengesnowman/app/modules/tabs/map/components/spot/models/model_spot_place.dart';
@@ -13,6 +14,9 @@ import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:mobx/mobx.dart';
+import 'package:provider/provider.dart';
+
+import '../../tab_map_controller.dart';
 
 part 'new_spot_controller.g.dart';
 
@@ -21,6 +25,7 @@ class NewSpotController = _NewSpotBase with _$NewSpotController;
 abstract class _NewSpotBase with Store {
   var kGoogleApiKey = "AIzaSyBphpLKL7zrQ9L6qSnjZ1LPph7GHA5Vn2o";
   final fireStoreProvider = FirebaseProvider();
+  final _tabMapController = Provider.of<TabMapController>(Get.context);
 
   @observable
   List<PlaceSpot> predictionsAutoComplete = [];
@@ -45,6 +50,12 @@ abstract class _NewSpotBase with Store {
 
   @observable
   bool isLoading = false;
+
+  @observable
+  double ratingMedium = 0.0;
+
+  @observable
+  SpotModel modelSelected;
 
   @computed
   bool get isImageSelected => _isImageSelected;
@@ -86,6 +97,27 @@ abstract class _NewSpotBase with Store {
     StorageUploadTask uploadTask = reference.putFile(image);
     await uploadTask.onComplete;
     await reference.getDownloadURL().then((value) => setImageUrl(value));
+  }
+
+  @action
+  getSpotById(id) async {
+    try {
+      isLoading = true;
+      await fireStoreProvider.getSpotByid(id).then((value) {
+        double total = 0.0;
+        modelSelected = value;
+        if (modelSelected.comments != null) {
+          modelSelected.comments.forEach((value) {
+            total += value.rating;
+          });
+          double media = total / modelSelected.comments.length;
+          ratingMedium = double.parse(media.toStringAsFixed(1));
+        }
+      });
+      isLoading = false;
+    } catch (e) {
+      Toast("Erro ao buscar categorias", e, "falha").getSnack();
+    }
   }
 
   @action
@@ -156,7 +188,8 @@ abstract class _NewSpotBase with Store {
             pinColor: spotModel.pinColor,
             title: spotModel.title,
             photo: _imageUrl,
-            user: userModel);
+            user: userModel,
+            id: placeSpot.placeId);
         fireStoreProvider.addSpot(model);
 
         _isImageSelected = false;
@@ -164,6 +197,30 @@ abstract class _NewSpotBase with Store {
         isLoading = false;
         Get.offNamed('/home/map');
       });
+    } catch (e) {
+      isLoading = false;
+      Toast("Erro ao adicionar spot", e, "falha").getSnack();
+    }
+  }
+
+  @action
+  addComment(rating, comment) async {
+    try {
+      isLoading = true;
+
+      CommentModel commentModel = CommentModel(
+          comment: comment,
+          rating: rating,
+          user: sharedPreferences.getUser().fullName);
+
+      await fireStoreProvider.updateSpot(
+          id: _tabMapController.markerIdSelected,
+          key: 'comments',
+          isArray: true,
+          valueUpdate: commentModel);
+      isLoading = false;
+      await getSpotById(_tabMapController.markerIdSelected);
+      Get.back();
     } catch (e) {
       isLoading = false;
       Toast("Erro ao adicionar spot", e, "falha").getSnack();

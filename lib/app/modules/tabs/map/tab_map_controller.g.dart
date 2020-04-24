@@ -26,6 +26,23 @@ mixin _$TabMapController on _TabMapBase, Store {
     }, _$isLoadingAtom, name: '${_$isLoadingAtom.name}_set');
   }
 
+  final _$markerIdSelectedAtom = Atom(name: '_TabMapBase.markerIdSelected');
+
+  @override
+  String get markerIdSelected {
+    _$markerIdSelectedAtom.context.enforceReadPolicy(_$markerIdSelectedAtom);
+    _$markerIdSelectedAtom.reportObserved();
+    return super.markerIdSelected;
+  }
+
+  @override
+  set markerIdSelected(String value) {
+    _$markerIdSelectedAtom.context.conditionallyRunInAction(() {
+      super.markerIdSelected = value;
+      _$markerIdSelectedAtom.reportChanged();
+    }, _$markerIdSelectedAtom, name: '${_$markerIdSelectedAtom.name}_set');
+  }
+
   final _$listMarkersAtom = Atom(name: '_TabMapBase.listMarkers');
 
   @override
@@ -77,6 +94,26 @@ mixin _$TabMapController on _TabMapBase, Store {
     }, _$_mapControllerAtom, name: '${_$_mapControllerAtom.name}_set');
   }
 
+  final _$showScrollableBottomAtom =
+      Atom(name: '_TabMapBase.showScrollableBottom');
+
+  @override
+  bool get showScrollableBottom {
+    _$showScrollableBottomAtom.context
+        .enforceReadPolicy(_$showScrollableBottomAtom);
+    _$showScrollableBottomAtom.reportObserved();
+    return super.showScrollableBottom;
+  }
+
+  @override
+  set showScrollableBottom(bool value) {
+    _$showScrollableBottomAtom.context.conditionallyRunInAction(() {
+      super.showScrollableBottom = value;
+      _$showScrollableBottomAtom.reportChanged();
+    }, _$showScrollableBottomAtom,
+        name: '${_$showScrollableBottomAtom.name}_set');
+  }
+
   final _$positionAtualAtom = Atom(name: '_TabMapBase.positionAtual');
 
   @override
@@ -121,6 +158,16 @@ mixin _$TabMapController on _TabMapBase, Store {
   }
 
   @override
+  dynamic setShowScrollableButton(dynamic value) {
+    final _$actionInfo = _$_TabMapBaseActionController.startAction();
+    try {
+      return super.setShowScrollableButton(value);
+    } finally {
+      _$_TabMapBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
   dynamic movePosition(dynamic lat, dynamic long) {
     final _$actionInfo = _$_TabMapBaseActionController.startAction();
     try {
@@ -153,7 +200,7 @@ mixin _$TabMapController on _TabMapBase, Store {
   @override
   String toString() {
     final string =
-        'isLoading: ${isLoading.toString()},listMarkers: ${listMarkers.toString()},listSpots: ${listSpots.toString()},positionAtual: ${positionAtual.toString()}';
+        'isLoading: ${isLoading.toString()},markerIdSelected: ${markerIdSelected.toString()},listMarkers: ${listMarkers.toString()},listSpots: ${listSpots.toString()},showScrollableBottom: ${showScrollableBottom.toString()},positionAtual: ${positionAtual.toString()}';
     return '{$string}';
   }
 }

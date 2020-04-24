@@ -1,7 +1,9 @@
 import 'package:challengesnowman/app/modules/models/categories_model.dart';
+import 'package:challengesnowman/app/modules/models/comment.dart';
 import 'package:challengesnowman/app/modules/models/spot_model.dart';
 import 'package:challengesnowman/app/modules/models/user_model.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/foundation.dart';
 
 class FirebaseProvider {
   Firestore _database = Firestore.instance;
@@ -45,7 +47,9 @@ class FirebaseProvider {
       List<DocumentSnapshot> list = values.documents;
 
       for (int i = 0; i < list.length; i++) {
-        listSpots.add(SpotModel.fromJson(list[i].data));
+        SpotModel spotModel = SpotModel.fromJson(list[i].data);
+        spotModel.id = list[i].documentID;
+        listSpots.add(spotModel);
       }
     });
     return listSpots;
@@ -67,5 +71,40 @@ class FirebaseProvider {
           }
         });
     return listSpots;
+  }
+
+  Future<SpotModel> getSpotByid(String id) async {
+    return await _database
+        .collection('spots')
+        .document(id)
+        .get()
+        .then((values) {
+      DocumentSnapshot documentSnapshot = values;
+      return SpotModel.fromJson(documentSnapshot.data);
+    });
+  }
+
+  updateSpot({String id, String key, valueUpdate, bool isArray = false}) async {
+    return await _database
+        .collection('spots')
+        .document(id)
+        .get()
+        .then((values) async {
+      DocumentSnapshot documentSnapshot = values;
+      SpotModel model = SpotModel.fromJson(documentSnapshot.data);
+      List<CommentModel> listComments = List();
+      if (model.comments == null) {
+        listComments.add(valueUpdate);
+        model.comments = listComments;
+      } else {
+        model.comments.add(valueUpdate);
+      }
+
+      await _database.document('spots/$id').updateData({
+        'comments': model.comments.map((e) => e.toJson()).toList()
+      }).catchError((error) {
+        print(error);
+      });
+    });
   }
 }

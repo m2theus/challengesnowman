@@ -17,29 +17,43 @@ abstract class _TabMapBase with Store {
   bool isLoading = false;
 
   @observable
+  String markerIdSelected;
+
+  @observable
   Set<Marker> listMarkers = Set();
 
   @observable
   List<SpotModel> listSpots = List();
 
   @observable
-   GoogleMapController _mapController;
+  GoogleMapController _mapController;
+
+  @observable
+  bool showScrollableBottom = false;
 
   @observable
   LatLng positionAtual;
 
+  AnimationController animationController;
+  Duration _duration = Duration(milliseconds: 500);
+
   final _auth = Auth();
   final fireStoreProvider = FirebaseProvider();
 
-  
   @action
   setMapController(GoogleMapController controller) {
     _mapController = controller;
   }
-  
+
+  @action
+  setShowScrollableButton(value) {
+    showScrollableBottom = value;
+  }
+
   @action
   movePosition(lat, long) {
-    _mapController.moveCamera(CameraUpdate.newLatLngZoom(LatLng(lat, long), 12));
+    _mapController
+        .moveCamera(CameraUpdate.newLatLngZoom(LatLng(lat, long), 12));
   }
 
   @action
@@ -71,8 +85,8 @@ abstract class _TabMapBase with Store {
   @action
   populateSpots() async {
     showLoading(true);
+    Set<Marker> markers = Set();
     await fireStoreProvider.getSpots().then((value) async {
-      Set<Marker> markers = Set();
       for (int i = 0; i < value.length; i++) {
         Marker marker = Marker(
           markerId:
@@ -84,11 +98,8 @@ abstract class _TabMapBase with Store {
             ).hue,
           ),
           onTap: () {
-//          setState(() {
-//            _spotId = documents[i].documentID;
-//            _showDraggableSheet = !_showDraggableSheet;
-//          });
-//          Timer(Duration(milliseconds: 200), () => _animationHandler());
+            markerIdSelected = value[i].id;
+            showScrollableBottom = true;
           },
         );
         markers.add(marker);
@@ -96,5 +107,11 @@ abstract class _TabMapBase with Store {
       setMarkers(markers);
       showLoading(false);
     });
+  }
+
+  _animationHandler() {
+    if (animationController.isDismissed) {
+      animationController.forward();
+    }
   }
 }

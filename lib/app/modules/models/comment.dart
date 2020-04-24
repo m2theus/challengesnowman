@@ -1,7 +1,7 @@
 class CommentModel {
   final String comment;
   final String user;
-  final String rating;
+  final double rating;
 
   CommentModel({
     this.comment,
