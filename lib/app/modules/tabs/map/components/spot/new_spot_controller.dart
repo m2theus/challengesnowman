@@ -55,6 +55,9 @@ abstract class _NewSpotBase with Store {
   double ratingMedium = 0.0;
 
   @observable
+  bool isFavorite = false;
+
+  @observable
   SpotModel modelSelected;
 
   @computed
@@ -100,12 +103,40 @@ abstract class _NewSpotBase with Store {
   }
 
   @action
+  setIsFavorite(value) async {
+    try {
+      await fireStoreProvider
+          .setIsFavorite(_tabMapController.markerIdSelected, value)
+          .then((retorno) {
+        isFavorite = value;
+      });
+    } catch (e) {
+      Toast("Erro ao favoritar spot", e, "falha").getSnack();
+    }
+  }
+
+  @action
+  updatePhoto(url) async {
+    try {
+      await fireStoreProvider
+          .updatePhoto(_tabMapController.markerIdSelected, url)
+          .then((retorno) async {
+        modelSelected.photo = url;
+      });
+    } catch (e) {
+      Toast("Erro ao favoritar spot", e, "falha").getSnack();
+    }
+  }
+
+  @action
   getSpotById(id) async {
     try {
       isLoading = true;
       await fireStoreProvider.getSpotByid(id).then((value) {
         double total = 0.0;
         modelSelected = value;
+        isFavorite =
+            modelSelected.isFavorite != null ? modelSelected.isFavorite : false;
         if (modelSelected.comments != null) {
           modelSelected.comments.forEach((value) {
             total += value.rating;
@@ -113,6 +144,24 @@ abstract class _NewSpotBase with Store {
           double media = total / modelSelected.comments.length;
           ratingMedium = double.parse(media.toStringAsFixed(1));
         }
+      });
+      isLoading = false;
+    } catch (e) {
+      Toast("Erro ao buscar categorias", e, "falha").getSnack();
+    }
+  }
+
+  @action
+  removeImage() async {
+    try {
+      isLoading = true;
+      modelSelected.photo = null;
+      setImageUrl(null);
+      setImage(null);
+      await fireStoreProvider
+          .removeImage(_tabMapController.markerIdSelected)
+          .then((value) {
+        getSpotById(_tabMapController.markerIdSelected);
       });
       isLoading = false;
     } catch (e) {

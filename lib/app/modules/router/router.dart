@@ -27,6 +27,11 @@ class Router {
             settings: settings,
             page: HomePage(index: 1,),
             transition: Transition.fade);
+      case '/home/favorites':
+        return GetRoute(
+            settings: settings,
+            page: HomePage(index: 0,),
+            transition: Transition.fade);
       default:
         return GetRoute(
             settings: settings, transition: Transition.fade, page: AppWidget());

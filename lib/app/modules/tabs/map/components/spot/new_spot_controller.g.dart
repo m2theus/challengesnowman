@@ -188,6 +188,23 @@ mixin _$NewSpotController on _NewSpotBase, Store {
     }, _$ratingMediumAtom, name: '${_$ratingMediumAtom.name}_set');
   }
 
+  final _$isFavoriteAtom = Atom(name: '_NewSpotBase.isFavorite');
+
+  @override
+  bool get isFavorite {
+    _$isFavoriteAtom.context.enforceReadPolicy(_$isFavoriteAtom);
+    _$isFavoriteAtom.reportObserved();
+    return super.isFavorite;
+  }
+
+  @override
+  set isFavorite(bool value) {
+    _$isFavoriteAtom.context.conditionallyRunInAction(() {
+      super.isFavorite = value;
+      _$isFavoriteAtom.reportChanged();
+    }, _$isFavoriteAtom, name: '${_$isFavoriteAtom.name}_set');
+  }
+
   final _$modelSelectedAtom = Atom(name: '_NewSpotBase.modelSelected');
 
   @override
@@ -205,11 +222,32 @@ mixin _$NewSpotController on _NewSpotBase, Store {
     }, _$modelSelectedAtom, name: '${_$modelSelectedAtom.name}_set');
   }
 
+  final _$setIsFavoriteAsyncAction = AsyncAction('setIsFavorite');
+
+  @override
+  Future setIsFavorite(dynamic value) {
+    return _$setIsFavoriteAsyncAction.run(() => super.setIsFavorite(value));
+  }
+
+  final _$updatePhotoAsyncAction = AsyncAction('updatePhoto');
+
+  @override
+  Future updatePhoto(dynamic url) {
+    return _$updatePhotoAsyncAction.run(() => super.updatePhoto(url));
+  }
+
   final _$getSpotByIdAsyncAction = AsyncAction('getSpotById');
 
   @override
   Future getSpotById(dynamic id) {
     return _$getSpotByIdAsyncAction.run(() => super.getSpotById(id));
+  }
+
+  final _$removeImageAsyncAction = AsyncAction('removeImage');
+
+  @override
+  Future removeImage() {
+    return _$removeImageAsyncAction.run(() => super.removeImage());
   }
 
   final _$getCategoriesAsyncAction = AsyncAction('getCategories');
@@ -286,7 +324,7 @@ mixin _$NewSpotController on _NewSpotBase, Store {
   @override
   String toString() {
     final string =
-        'predictionsAutoComplete: ${predictionsAutoComplete.toString()},categories: ${categories.toString()},isLoading: ${isLoading.toString()},ratingMedium: ${ratingMedium.toString()},modelSelected: ${modelSelected.toString()},isImageSelected: ${isImageSelected.toString()},image: ${image.toString()},imageSource: ${imageSource.toString()},imageUrl: ${imageUrl.toString()}';
+        'predictionsAutoComplete: ${predictionsAutoComplete.toString()},categories: ${categories.toString()},isLoading: ${isLoading.toString()},ratingMedium: ${ratingMedium.toString()},isFavorite: ${isFavorite.toString()},modelSelected: ${modelSelected.toString()},isImageSelected: ${isImageSelected.toString()},image: ${image.toString()},imageSource: ${imageSource.toString()},imageUrl: ${imageUrl.toString()}';
     return '{$string}';
   }
 }

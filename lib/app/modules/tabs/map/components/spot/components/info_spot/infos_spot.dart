@@ -1,4 +1,5 @@
 import 'package:challengesnowman/app/modules/shared/components/star_rating.dart';
+import 'package:challengesnowman/app/modules/tabs/map/components/spot/components/image_select.dart';
 import 'package:challengesnowman/app/modules/tabs/map/components/spot/components/info_spot/components/add_comments.dart';
 import 'package:challengesnowman/app/modules/tabs/map/components/spot/new_spot_controller.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -106,17 +107,90 @@ class _InfosSpotState extends State<InfosSpot> {
                                 width: MediaQuery.of(context).size.width * 0.95,
                                 height:
                                     MediaQuery.of(context).size.height * 0.20,
-                                child: Image(
-                                  image: _spotController.modelSelected?.photo !=
-                                              null &&
-                                          _spotController
-                                                  .modelSelected?.photo !=
-                                              ''
-                                      ? NetworkImage(
-                                          _spotController.modelSelected?.photo)
-                                      : AssetImage('assets/images/logo.png'),
-                                  fit: BoxFit.fitWidth,
-                                )),
+                                child: _spotController.modelSelected?.photo !=
+                                        null
+                                    ? Stack(
+                                        children: _spotController
+                                                    .modelSelected?.photo !=
+                                                null
+                                            ? <Widget>[
+                                                Positioned.fill(
+                                                  child: Image(
+                                                    image: _spotController
+                                                                    .modelSelected
+                                                                    ?.photo !=
+                                                                null &&
+                                                            _spotController
+                                                                    .modelSelected
+                                                                    ?.photo !=
+                                                                ''
+                                                        ? NetworkImage(
+                                                            _spotController
+                                                                .modelSelected
+                                                                ?.photo)
+                                                        : AssetImage(
+                                                            'assets/images/logo.png'),
+                                                    fit: BoxFit.fitWidth,
+                                                  ),
+                                                ),
+                                                Positioned(
+                                                  top: 15,
+                                                  left: 15,
+                                                  child: InkWell(
+                                                    onTap: () => _spotController
+                                                        .removeImage(),
+                                                    child: Container(
+                                                      decoration: BoxDecoration(
+                                                          color: Colors.black
+                                                              .withOpacity(0.6),
+                                                          shape:
+                                                              BoxShape.circle),
+                                                      width: 25,
+                                                      height: 25,
+                                                      child: Icon(
+                                                        Icons.close,
+                                                        size: 20,
+                                                        color: Colors.white,
+                                                      ),
+                                                    ),
+                                                  ),
+                                                ),
+                                              ]
+                                            : <Widget>[ImageSelect()])
+                                    : Stack(
+                                        children: _spotController.image != null
+                                            ? <Widget>[
+                                                Positioned.fill(
+                                                  child: Image.file(
+                                                      _spotController.image,
+                                                      fit: BoxFit.cover),
+                                                ),
+                                                Positioned(
+                                                  top: 15,
+                                                  left: 15,
+                                                  child: InkWell(
+                                                    onTap: () async {
+                                                      await _spotController
+                                                          .removeImage();
+                                                    },
+                                                    child: Container(
+                                                      decoration: BoxDecoration(
+                                                          color: Colors.black
+                                                              .withOpacity(0.6),
+                                                          shape:
+                                                              BoxShape.circle),
+                                                      width: 25,
+                                                      height: 25,
+                                                      child: Icon(
+                                                        Icons.close,
+                                                        size: 20,
+                                                        color: Colors.white,
+                                                      ),
+                                                    ),
+                                                  ),
+                                                ),
+                                              ]
+                                            : <Widget>[ImageSelect()])),
                             Container(
                                 color: Colors.white,
                                 width: MediaQuery.of(context).size.width * 0.95,
@@ -132,16 +206,14 @@ class _InfosSpotState extends State<InfosSpot> {
                                             alignment: Alignment.centerLeft,
                                             child: SmoothStarRating(
                                                 allowHalfRating: false,
-                                                onRatingChanged: (v) {
-//                                      rating = v;
-//                                      setState(() {});
-                                                },
+                                                onRatingChanged: (v) {},
                                                 starCount: 5,
                                                 rating: _spotController
                                                     .ratingMedium,
                                                 size: 40.0,
                                                 filledIconData: Icons.star,
-                                                halfFilledIconData: Icons.star_half,
+                                                halfFilledIconData:
+                                                    Icons.star_half,
                                                 color: Theme.of(context)
                                                     .primaryColor,
                                                 borderColor: Theme.of(context)
@@ -312,19 +384,31 @@ class _InfosSpotState extends State<InfosSpot> {
             )),
           ),
           trailing: Container(
-            decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(10),
-                shape: BoxShape.rectangle,
-                border: Border.all(color: Colors.pinkAccent)),
-            child: IconButton(
-              color: Colors.white,
-              icon: Icon(
-                Icons.favorite_border,
-                color: Colors.pinkAccent,
-              ),
-              onPressed: () {},
-            ),
-          ),
+              decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(10),
+                  shape: BoxShape.rectangle,
+                  border: Border.all(color: Colors.pinkAccent)),
+              child: _spotController.isFavorite
+                  ? IconButton(
+                      color: Colors.white,
+                      icon: Icon(
+                        Icons.favorite,
+                        color: Colors.pinkAccent,
+                      ),
+                      onPressed: () {
+                        _spotController.setIsFavorite(false);
+                      },
+                    )
+                  : IconButton(
+                      color: Colors.white,
+                      icon: Icon(
+                        Icons.favorite_border,
+                        color: Colors.pinkAccent,
+                      ),
+                      onPressed: () {
+                        _spotController.setIsFavorite(true);
+                      },
+                    )),
           subtitle: Text(
             _spotController.modelSelected?.description,
             style: GoogleFonts.nunito(
@@ -337,5 +421,4 @@ class _InfosSpotState extends State<InfosSpot> {
       },
     );
   }
-
 }

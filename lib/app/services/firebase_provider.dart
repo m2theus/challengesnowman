@@ -2,6 +2,7 @@ import 'package:challengesnowman/app/modules/models/categories_model.dart';
 import 'package:challengesnowman/app/modules/models/comment.dart';
 import 'package:challengesnowman/app/modules/models/spot_model.dart';
 import 'package:challengesnowman/app/modules/models/user_model.dart';
+import 'package:challengesnowman/app/services/shared_preferences_service.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/foundation.dart';
 
@@ -23,6 +24,18 @@ class FirebaseProvider {
 
   void addSpot(SpotModel spot) {
     _database.collection('spots').add(spot.toJson());
+  }
+
+  Future<void> removeImage(id) async {
+    await _database.document('spots/$id').updateData({'photo': null});
+  }
+
+  Future<void> setIsFavorite(id, value) async {
+    await _database.document('spots/$id').updateData({'isFavorite': value});
+  }
+
+  Future<void> updatePhoto(id, url) async {
+    await _database.document('spots/$id').updateData({'photo': url});
   }
 
   void updateUser({UserModel user, var uid}) async {
@@ -50,6 +63,27 @@ class FirebaseProvider {
         SpotModel spotModel = SpotModel.fromJson(list[i].data);
         spotModel.id = list[i].documentID;
         listSpots.add(spotModel);
+      }
+    });
+    return listSpots;
+  }
+
+  Future<List<SpotModel>> getSpotsFavorites() async {
+    UserModel userModel = sharedPreferences.getUser();
+    List<SpotModel> listSpots = new List();
+    await _database
+        .collection('spots')
+        .where('isFavorite', isEqualTo: true)
+        .getDocuments()
+        .then((values) {
+      List<DocumentSnapshot> list = values.documents;
+
+      for (int i = 0; i < list.length; i++) {
+        SpotModel spotModel = SpotModel.fromJson(list[i].data);
+        spotModel.id = list[i].documentID;
+        if (spotModel.user.email == userModel.email) {
+          listSpots.add(spotModel);
+        }
       }
     });
     return listSpots;

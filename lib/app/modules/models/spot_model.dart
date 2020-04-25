@@ -8,7 +8,7 @@ class SpotModel {
   final double lat;
   final double long;
   final UserModel user;
-  final String photo;
+  String photo;
   final CategoriesModel category;
   final String description;
   List<CommentModel> comments;
