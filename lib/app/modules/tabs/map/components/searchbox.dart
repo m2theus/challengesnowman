@@ -1,5 +1,7 @@
 import 'package:challengesnowman/app/modules/models/spot_model.dart';
+import 'package:challengesnowman/app/modules/models/user_model.dart';
 import 'package:challengesnowman/app/modules/tabs/map/components/spot/new_spot.dart';
+import 'package:challengesnowman/app/services/shared_preferences_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter_typeahead/flutter_typeahead.dart';
@@ -19,6 +21,13 @@ class _SearchBoxState extends State<SearchBox> {
   final _tabMapController =
       Provider.of<TabMapController>(Get.context, listen: false);
   SpotModel _locationSelected;
+  bool isAnonymous = false;
+
+  @override
+  void initState() {
+    UserModel userModel = sharedPreferences.getUser();
+    isAnonymous = userModel.isAnonymous;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -82,19 +91,23 @@ class _SearchBoxState extends State<SearchBox> {
               },
             ),
           ),
-          Container(
-            width: 1.5,
-            height: MediaQuery.of(context).size.height * 0.05,
-            color: Colors.grey[200],
-          ),
-          Flexible(
-            flex: 1,
-            child: IconButton(
-              icon: Icon(Icons.add, color: Colors.grey, size: 25),
-              onPressed: () => showDialog(
-                  context: context, builder: (context) => NewSpotModal()),
-            ),
-          )
+          isAnonymous
+              ? Container()
+              : Container(
+                  width: 1.5,
+                  height: MediaQuery.of(context).size.height * 0.05,
+                  color: Colors.grey[200],
+                ),
+          isAnonymous
+              ? Container()
+              : Flexible(
+                  flex: 1,
+                  child: IconButton(
+                    icon: Icon(Icons.add, color: Colors.grey, size: 25),
+                    onPressed: () => showDialog(
+                        context: context, builder: (context) => NewSpotModal()),
+                  ),
+                )
         ],
       ),
     );

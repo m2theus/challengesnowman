@@ -1,6 +1,6 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'login_controller.dart';
+part of 'user_controller.dart';
 
 // **************************************************************************
 // StoreGenerator
@@ -8,8 +8,8 @@ part of 'login_controller.dart';
 
 // ignore_for_file: non_constant_identifier_names, unnecessary_lambdas, prefer_expression_function_bodies, lines_longer_than_80_chars, avoid_as, avoid_annotating_with_dynamic
 
-mixin _$LoginController on _LoginBase, Store {
-  final _$isLoadingAtom = Atom(name: '_LoginBase.isLoading');
+mixin _$UserController on _UserControllerBase, Store {
+  final _$isLoadingAtom = Atom(name: '_UserControllerBase.isLoading');
 
   @override
   bool get isLoading {
@@ -26,42 +26,40 @@ mixin _$LoginController on _LoginBase, Store {
     }, _$isLoadingAtom, name: '${_$isLoadingAtom.name}_set');
   }
 
-  final _$loginAsyncAction = AsyncAction('login');
+  final _$listSpotsAtom = Atom(name: '_UserControllerBase.listSpots');
 
   @override
-  Future<void> login() {
-    return _$loginAsyncAction.run(() => super.login());
+  List<SpotModel> get listSpots {
+    _$listSpotsAtom.context.enforceReadPolicy(_$listSpotsAtom);
+    _$listSpotsAtom.reportObserved();
+    return super.listSpots;
   }
-
-  final _$loginAninimousAsyncAction = AsyncAction('loginAninimous');
 
   @override
-  Future<void> loginAninimous() {
-    return _$loginAninimousAsyncAction.run(() => super.loginAninimous());
+  set listSpots(List<SpotModel> value) {
+    _$listSpotsAtom.context.conditionallyRunInAction(() {
+      super.listSpots = value;
+      _$listSpotsAtom.reportChanged();
+    }, _$listSpotsAtom, name: '${_$listSpotsAtom.name}_set');
   }
 
-  final _$signUpAsyncAction = AsyncAction('signUp');
-
-  @override
-  Future<void> signUp() {
-    return _$signUpAsyncAction.run(() => super.signUp());
-  }
-
-  final _$_LoginBaseActionController = ActionController(name: '_LoginBase');
+  final _$_UserControllerBaseActionController =
+      ActionController(name: '_UserControllerBase');
 
   @override
   dynamic showLoading(bool value) {
-    final _$actionInfo = _$_LoginBaseActionController.startAction();
+    final _$actionInfo = _$_UserControllerBaseActionController.startAction();
     try {
       return super.showLoading(value);
     } finally {
-      _$_LoginBaseActionController.endAction(_$actionInfo);
+      _$_UserControllerBaseActionController.endAction(_$actionInfo);
     }
   }
 
   @override
   String toString() {
-    final string = 'isLoading: ${isLoading.toString()}';
+    final string =
+        'isLoading: ${isLoading.toString()},listSpots: ${listSpots.toString()}';
     return '{$string}';
   }
 }

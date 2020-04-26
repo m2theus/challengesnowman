@@ -4,6 +4,7 @@ import 'package:challengesnowman/app/modules/router/router.dart';
 import 'package:challengesnowman/app/modules/tabs/favorites/favorites_controller.dart';
 import 'package:challengesnowman/app/modules/tabs/map/components/spot/new_spot_controller.dart';
 import 'package:challengesnowman/app/modules/tabs/map/tab_map_controller.dart';
+import 'package:challengesnowman/app/modules/tabs/user/user_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:get/get.dart';
@@ -37,6 +38,9 @@ class AppWidget extends StatelessWidget {
           ),
           Provider<FavoritesController>(
             create: (_) => FavoritesController(),
+          ),
+          Provider<UserController>(
+            create: (_) => UserController(),
           ),
         ]);
   }

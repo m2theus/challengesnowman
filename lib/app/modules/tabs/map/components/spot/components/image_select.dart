@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:challengesnowman/app/modules/shared/components/button.dart';
 import 'package:challengesnowman/app/modules/tabs/map/components/spot/new_spot_controller.dart';
 import 'package:flutter/cupertino.dart';

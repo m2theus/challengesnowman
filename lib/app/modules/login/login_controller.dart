@@ -2,6 +2,7 @@ import 'package:challengesnowman/app/modules/login/components/toast.dart';
 import 'package:challengesnowman/app/modules/models/user_model.dart';
 import 'package:challengesnowman/app/services/authorization.dart';
 import 'package:challengesnowman/app/services/shared_preferences_service.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:get/get.dart';
 import 'package:mobx/mobx.dart';
 
@@ -25,6 +26,27 @@ abstract class _LoginBase with Store {
     try {
       showLoading(true);
       UserModel user = await _auth.signInFacebook();
+      await sharedPreferences.openSession(user);
+      showLoading(false);
+      Get.toNamed('/home');
+    } catch (e) {
+      showLoading(false);
+      Toast("Login", e, "falha").getSnack();
+    }
+  }
+
+  @action
+  Future<void> loginAninimous() async {
+    try {
+      showLoading(true);
+      AuthResult authResult = await _auth.signInAnonymously();
+      var user = UserModel(
+        fullName: authResult.user.displayName,
+        email: authResult.user.email,
+        photoUrl: authResult.user.photoUrl,
+        uid: authResult.user.uid,
+        isAnonymous: authResult.user.isAnonymous
+      );
       await sharedPreferences.openSession(user);
       showLoading(false);
       Get.toNamed('/home');

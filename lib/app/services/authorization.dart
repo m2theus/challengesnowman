@@ -6,11 +6,18 @@ import 'package:challengesnowman/app/services/shared_preferences_service.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_facebook_login/flutter_facebook_login.dart';
+import 'package:get/get.dart';
 
 class Auth {
   FacebookLogin _facebookLogin = FacebookLogin();
   final fireStoreProvider = FirebaseProvider();
   FirebaseAuth firebaseAuth = FirebaseAuth.instance;
+
+  Future<AuthResult> signInAnonymously() async {
+    AuthResult auth = await firebaseAuth.signInAnonymously();
+
+    return auth;
+  }
 
   signInFacebook() async {
     try {
@@ -25,11 +32,11 @@ class Auth {
           auth = await firebaseAuth.signInWithCredential(credential);
 
           user = UserModel(
-            fullName: auth.user.displayName,
-            email: auth.user.email,
-            photoUrl: auth.user.photoUrl,
-            uid: auth.user.uid,
-          );
+              fullName: auth.user.displayName,
+              email: auth.user.email,
+              photoUrl: auth.user.photoUrl,
+              uid: auth.user.uid,
+              isAnonymous: auth.user.isAnonymous);
 
           await validUser(firebaseUser: auth.user, user: user);
           break;
@@ -61,11 +68,11 @@ class Auth {
           auth = await firebaseAuth.signInWithCredential(credential);
 
           user = UserModel(
-            fullName: auth.user.displayName,
-            email: auth.user.email,
-            photoUrl: auth.user.photoUrl,
-            uid: auth.user.uid,
-          );
+              fullName: auth.user.displayName,
+              email: auth.user.email,
+              photoUrl: auth.user.photoUrl,
+              uid: auth.user.uid,
+              isAnonymous: auth.user.isAnonymous);
           bool result = await checkUserExist(user.email);
           if (!result) {
             await fireStoreProvider.addUser(user);
@@ -98,8 +105,11 @@ class Auth {
     }
   }
 
-  static Future<void> signOut() async {
-    return FirebaseAuth.instance.signOut();
+  void signOut() async {
+    _facebookLogin.logOut();
+    firebaseAuth.signOut();
+    sharedPreferences.closeSession();
+    Get.offNamed("/login");
   }
 
   static Future<FirebaseUser> getCurrentFirebaseUser() async {

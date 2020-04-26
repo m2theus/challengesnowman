@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:challengesnowman/app/modules/tabs/favorites/favorites_page.dart';
 import 'package:challengesnowman/app/modules/tabs/map/tab_map_page.dart';
+import 'package:challengesnowman/app/modules/tabs/user/user_page.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
@@ -37,7 +38,7 @@ class _HomePageState extends State<HomePage> {
                   child: TabMapPage(key: _mapKey),
                 ),
                 new Container(
-                  color: Colors.lightGreen,
+                  child: UserTab(),
                 ),
               ],
             ),

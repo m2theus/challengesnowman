@@ -1,13 +1,13 @@
 import 'package:challengesnowman/app/modules/login/components/login_button.dart';
 import 'package:challengesnowman/app/modules/login/components/text_login_button.dart';
 import 'package:challengesnowman/app/modules/login/login_controller.dart';
+import 'package:challengesnowman/app/modules/shared/components/button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:get/get.dart';
 import 'package:provider/provider.dart';
 
 class LoginPage extends StatefulWidget {
-
   @override
   _LoginPageState createState() => _LoginPageState();
 }
@@ -47,7 +47,7 @@ class _LoginPageState extends State<LoginPage> {
                             Theme.of(context).primaryColor),
                       ),
                     )
-                  :  _buildContent(context)),
+                  : _buildContent(context)),
         );
       },
     );
@@ -72,6 +72,20 @@ class _LoginPageState extends State<LoginPage> {
         children: <Widget>[
           LoginButton(isSignInButton: true),
           LoginButton(isSignInButton: false),
+          Padding(
+            padding: EdgeInsets.only(bottom: 10),
+            child: ButtonCustom(
+              onTap: () {
+                _loginController.loginAninimous();
+              },
+              label: "Anonymous",
+              width: MediaQuery.of(context).size.width * 0.80,
+              color: Colors.yellow[600],
+              colorLabel: Theme.of(context).primaryColor,
+              margin: EdgeInsets.only(top: 40),
+            ),
+          )
+
 //            AnonymousButton(),
         ],
       ),

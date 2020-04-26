@@ -14,23 +14,31 @@ class Router {
         );
       case '/login':
         return GetRoute(
-            settings: settings,
-            page: LoginPage(),
-            transition: Transition.fade);
+            settings: settings, page: LoginPage(), transition: Transition.fade);
       case '/home':
         return GetRoute(
-            settings: settings,
-            page: HomePage(),
-            transition: Transition.fade);
+            settings: settings, page: HomePage(), transition: Transition.fade);
       case '/home/map':
         return GetRoute(
             settings: settings,
-            page: HomePage(index: 1,),
+            page: HomePage(
+              index: 1,
+            ),
             transition: Transition.fade);
       case '/home/favorites':
         return GetRoute(
             settings: settings,
-            page: HomePage(index: 0,),
+            page: HomePage(
+              index: 0,
+            ),
+            transition: Transition.fade);
+
+      case '/home/user':
+        return GetRoute(
+            settings: settings,
+            page: HomePage(
+              index: 2,
+            ),
             transition: Transition.fade);
       default:
         return GetRoute(

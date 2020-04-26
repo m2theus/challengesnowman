@@ -1,8 +1,8 @@
-import 'package:challengesnowman/app/modules/shared/components/star_rating.dart';
+import 'package:challengesnowman/app/modules/models/user_model.dart';
 import 'package:challengesnowman/app/modules/tabs/map/components/spot/components/image_select.dart';
 import 'package:challengesnowman/app/modules/tabs/map/components/spot/components/info_spot/components/add_comments.dart';
 import 'package:challengesnowman/app/modules/tabs/map/components/spot/new_spot_controller.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:challengesnowman/app/services/shared_preferences_service.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
@@ -18,10 +18,8 @@ class InfosSpot extends StatefulWidget {
   const InfosSpot({
     this.id,
     this.scrollController,
-    this.anonymous,
   });
 
-  final bool anonymous;
   final String id;
   final ScrollController scrollController;
 
@@ -30,9 +28,7 @@ class InfosSpot extends StatefulWidget {
 }
 
 class _InfosSpotState extends State<InfosSpot> {
-  Future<DocumentSnapshot> _future;
-  double _rating;
-  bool _isFavorite;
+  bool anonymous = false;
   final _spotController =
       Provider.of<NewSpotController>(Get.context, listen: false);
   final _tabMapController =
@@ -41,200 +37,200 @@ class _InfosSpotState extends State<InfosSpot> {
   @override
   void initState() {
     _spotController.getSpotById(widget.id);
+    UserModel userModel = sharedPreferences.getUser();
+    anonymous = userModel.isAnonymous;
   }
 
   @override
   Widget build(BuildContext context) {
-    return Observer(builder: (_) {
-      return Column(
-        children: <Widget>[
-          Align(
-              alignment: Alignment.centerLeft,
-              child: Container(
-                decoration: BoxDecoration(
-                    borderRadius: BorderRadius.all(Radius.circular(6)),
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.black38,
-                        offset: Offset(0.0, 1.0),
-                        blurRadius: 2,
-                      ),
-                    ],
-                    color: Colors.white),
-                margin: EdgeInsets.only(top: 24, left: 20, bottom: 10),
-                width: 40,
-                height: 40,
-                child: Center(
-                  child: IconButton(
-                    icon: Icon(
-                      Icons.close,
-                      color: Colors.grey,
-                      size: 25,
+    return Column(
+      children: <Widget>[
+        Align(
+            alignment: Alignment.centerLeft,
+            child: Container(
+              decoration: BoxDecoration(
+                  borderRadius: BorderRadius.all(Radius.circular(6)),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.black38,
+                      offset: Offset(0.0, 1.0),
+                      blurRadius: 2,
                     ),
-                    onPressed: () =>
-                        _tabMapController.setShowScrollableButton(false),
+                  ],
+                  color: Colors.white),
+              margin: EdgeInsets.only(top: 24, left: 20, bottom: 10),
+              width: 40,
+              height: 40,
+              child: Center(
+                child: IconButton(
+                  icon: Icon(
+                    Icons.close,
+                    color: Colors.grey,
+                    size: 25,
                   ),
+                  onPressed: () =>
+                      _tabMapController.setShowScrollableButton(false),
                 ),
-              )),
-          Expanded(
-            child: SingleChildScrollView(
-                controller: widget.scrollController,
-                child: _spotController.isLoading
-                    ? Center(
-                        child: CircularProgressIndicator(),
-                      )
-                    : Container(
-                        width: MediaQuery.of(context).size.width * 0.90,
-                        height: MediaQuery.of(context).size.height * 0.95,
-                        decoration: BoxDecoration(
-                          shape: BoxShape.rectangle,
-                          borderRadius: BorderRadius.only(
-                              topLeft: Radius.circular(25.0),
-                              bottomRight: Radius.circular(25.0)),
-                          color: Colors.white,
-                          boxShadow: [
-                            BoxShadow(
-                              color: Colors.black38,
-                              offset: Offset(0.0, 1.0),
-                              blurRadius: 2,
+              ),
+            )),
+        buildContainer()
+      ],
+    );
+  }
+
+  buildContainer() {
+    return Observer(
+      builder: (_) {
+        return Expanded(
+          child: SingleChildScrollView(
+              controller: widget.scrollController,
+              child: _spotController.isLoading
+                  ? Center(
+                      child: CircularProgressIndicator(),
+                    )
+                  : Container(
+                      width: MediaQuery.of(context).size.width * 0.90,
+                      height: MediaQuery.of(context).size.height * 0.95,
+                      decoration: BoxDecoration(
+                        shape: BoxShape.rectangle,
+                        borderRadius: BorderRadius.only(
+                            topLeft: Radius.circular(25.0),
+                            bottomRight: Radius.circular(25.0)),
+                        color: Colors.white,
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.black38,
+                            offset: Offset(0.0, 1.0),
+                            blurRadius: 2,
+                          ),
+                        ],
+                      ),
+                      child: Column(
+                        children: <Widget>[
+                          buildHeader(),
+                          Container(
+                              color: Colors.white,
+                              width: MediaQuery.of(context).size.width * 0.95,
+                              height: MediaQuery.of(context).size.height * 0.75,
+                              padding: EdgeInsets.only(top: 24),
+                              child: Container(
+                                child: Column(
+                                  children: <Widget>[
+                                    buildTitle(),
+                                    Padding(
+                                      child: Align(
+                                          alignment: Alignment.centerLeft,
+                                          child: SmoothStarRating(
+                                              allowHalfRating: false,
+                                              onRatingChanged: (v) {},
+                                              starCount: 5,
+                                              rating:
+                                                  _spotController.ratingMedium,
+                                              size: 40.0,
+                                              filledIconData: Icons.star,
+                                              halfFilledIconData:
+                                                  Icons.star_half,
+                                              color: Theme.of(context)
+                                                  .primaryColor,
+                                              borderColor: Theme.of(context)
+                                                  .primaryColor,
+                                              spacing: 0.0)),
+                                      padding:
+                                          EdgeInsets.only(left: 16, right: 16),
+                                    ),
+                                    buildCategory(),
+                                    Expanded(
+                                      child: buildComments(),
+                                    ),
+                                  ],
+                                ),
+                              )),
+                        ],
+                      ))),
+        );
+      },
+    );
+  }
+
+  buildHeader() {
+    return Observer(
+      builder: (_) {
+        return Container(
+            color: Colors.white,
+            width: MediaQuery.of(context).size.width * 0.95,
+            height: MediaQuery.of(context).size.height * 0.20,
+            child: _spotController.modelSelected?.photo != null
+                ? Stack(
+                    children: _spotController.modelSelected?.photo != null
+                        ? <Widget>[
+                            Positioned.fill(
+                              child: Image(
+                                image: _spotController.modelSelected?.photo !=
+                                            null &&
+                                        _spotController.modelSelected?.photo !=
+                                            ''
+                                    ? NetworkImage(
+                                        _spotController.modelSelected?.photo)
+                                    : AssetImage('assets/images/logo.png'),
+                                fit: BoxFit.fitWidth,
+                              ),
                             ),
-                          ],
-                        ),
-                        child: Column(
-                          children: <Widget>[
-                            Container(
-                                color: Colors.white,
-                                width: MediaQuery.of(context).size.width * 0.95,
-                                height:
-                                    MediaQuery.of(context).size.height * 0.20,
-                                child: _spotController.modelSelected?.photo !=
-                                        null
-                                    ? Stack(
-                                        children: _spotController
-                                                    .modelSelected?.photo !=
-                                                null
-                                            ? <Widget>[
-                                                Positioned.fill(
-                                                  child: Image(
-                                                    image: _spotController
-                                                                    .modelSelected
-                                                                    ?.photo !=
-                                                                null &&
-                                                            _spotController
-                                                                    .modelSelected
-                                                                    ?.photo !=
-                                                                ''
-                                                        ? NetworkImage(
-                                                            _spotController
-                                                                .modelSelected
-                                                                ?.photo)
-                                                        : AssetImage(
-                                                            'assets/images/logo.png'),
-                                                    fit: BoxFit.fitWidth,
-                                                  ),
-                                                ),
-                                                Positioned(
-                                                  top: 15,
-                                                  left: 15,
-                                                  child: InkWell(
-                                                    onTap: () => _spotController
-                                                        .removeImage(),
-                                                    child: Container(
-                                                      decoration: BoxDecoration(
-                                                          color: Colors.black
-                                                              .withOpacity(0.6),
-                                                          shape:
-                                                              BoxShape.circle),
-                                                      width: 25,
-                                                      height: 25,
-                                                      child: Icon(
-                                                        Icons.close,
-                                                        size: 20,
-                                                        color: Colors.white,
-                                                      ),
-                                                    ),
-                                                  ),
-                                                ),
-                                              ]
-                                            : <Widget>[ImageSelect()])
-                                    : Stack(
-                                        children: _spotController.image != null
-                                            ? <Widget>[
-                                                Positioned.fill(
-                                                  child: Image.file(
-                                                      _spotController.image,
-                                                      fit: BoxFit.cover),
-                                                ),
-                                                Positioned(
-                                                  top: 15,
-                                                  left: 15,
-                                                  child: InkWell(
-                                                    onTap: () async {
-                                                      await _spotController
-                                                          .removeImage();
-                                                    },
-                                                    child: Container(
-                                                      decoration: BoxDecoration(
-                                                          color: Colors.black
-                                                              .withOpacity(0.6),
-                                                          shape:
-                                                              BoxShape.circle),
-                                                      width: 25,
-                                                      height: 25,
-                                                      child: Icon(
-                                                        Icons.close,
-                                                        size: 20,
-                                                        color: Colors.white,
-                                                      ),
-                                                    ),
-                                                  ),
-                                                ),
-                                              ]
-                                            : <Widget>[ImageSelect()])),
-                            Container(
-                                color: Colors.white,
-                                width: MediaQuery.of(context).size.width * 0.95,
-                                height:
-                                    MediaQuery.of(context).size.height * 0.75,
-                                padding: EdgeInsets.only(top: 24),
+                            Positioned(
+                              top: 15,
+                              left: 15,
+                              child: InkWell(
+                                onTap: () => _spotController.removeImage(),
                                 child: Container(
-                                  child: Column(
-                                    children: <Widget>[
-                                      buildTitle(),
-                                      Padding(
-                                        child: Align(
-                                            alignment: Alignment.centerLeft,
-                                            child: SmoothStarRating(
-                                                allowHalfRating: false,
-                                                onRatingChanged: (v) {},
-                                                starCount: 5,
-                                                rating: _spotController
-                                                    .ratingMedium,
-                                                size: 40.0,
-                                                filledIconData: Icons.star,
-                                                halfFilledIconData:
-                                                    Icons.star_half,
-                                                color: Theme.of(context)
-                                                    .primaryColor,
-                                                borderColor: Theme.of(context)
-                                                    .primaryColor,
-                                                spacing: 0.0)),
-                                        padding: EdgeInsets.only(
-                                            left: 16, right: 16),
-                                      ),
-                                      buildCategory(),
-                                      Expanded(
-                                        child: buildComments(),
-                                      ),
-                                    ],
+                                  decoration: BoxDecoration(
+                                      color: Colors.black.withOpacity(0.6),
+                                      shape: BoxShape.circle),
+                                  width: 25,
+                                  height: 25,
+                                  child: Icon(
+                                    Icons.close,
+                                    size: 20,
+                                    color: Colors.white,
                                   ),
-                                )),
-                          ],
-                        ))),
-          )
-        ],
-      );
-    });
+                                ),
+                              ),
+                            ),
+                          ]
+                        : <Widget>[ImageSelect()])
+                : Stack(
+                    children: _spotController.image != null
+                        ? <Widget>[
+                            Positioned.fill(
+                              child: Image.file(_spotController.image,
+                                  fit: BoxFit.cover),
+                            ),
+                            anonymous
+                                ? Container()
+                                : Positioned(
+                                    top: 15,
+                                    left: 15,
+                                    child: InkWell(
+                                      onTap: () async {
+                                        await _spotController.removeImage();
+                                      },
+                                      child: Container(
+                                        decoration: BoxDecoration(
+                                            color:
+                                                Colors.black.withOpacity(0.6),
+                                            shape: BoxShape.circle),
+                                        width: 25,
+                                        height: 25,
+                                        child: Icon(
+                                          Icons.close,
+                                          size: 20,
+                                          color: Colors.white,
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                          ]
+                        : <Widget>[ImageSelect()]));
+      },
+    );
   }
 
   buildComments() {
@@ -268,8 +264,11 @@ class _InfosSpotState extends State<InfosSpot> {
                       color: Theme.of(context).primaryColor,
                     ),
                     onPressed: () {
-                      showDialog(
-                          context: context, builder: (context) => AddComment());
+                      anonymous
+                          ? null
+                          : showDialog(
+                              context: context,
+                              builder: (context) => AddComment());
                     },
                   ),
                 ),
@@ -383,32 +382,34 @@ class _InfosSpotState extends State<InfosSpot> {
               fontWeight: FontWeight.bold,
             )),
           ),
-          trailing: Container(
-              decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(10),
-                  shape: BoxShape.rectangle,
-                  border: Border.all(color: Colors.pinkAccent)),
-              child: _spotController.isFavorite
-                  ? IconButton(
-                      color: Colors.white,
-                      icon: Icon(
-                        Icons.favorite,
-                        color: Colors.pinkAccent,
-                      ),
-                      onPressed: () {
-                        _spotController.setIsFavorite(false);
-                      },
-                    )
-                  : IconButton(
-                      color: Colors.white,
-                      icon: Icon(
-                        Icons.favorite_border,
-                        color: Colors.pinkAccent,
-                      ),
-                      onPressed: () {
-                        _spotController.setIsFavorite(true);
-                      },
-                    )),
+          trailing: anonymous
+              ? null
+              : Container(
+                  decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(10),
+                      shape: BoxShape.rectangle,
+                      border: Border.all(color: Colors.pinkAccent)),
+                  child: _spotController.isFavorite
+                      ? IconButton(
+                          color: Colors.white,
+                          icon: Icon(
+                            Icons.favorite,
+                            color: Colors.pinkAccent,
+                          ),
+                          onPressed: () {
+                            _spotController.setIsFavorite(false);
+                          },
+                        )
+                      : IconButton(
+                          color: Colors.white,
+                          icon: Icon(
+                            Icons.favorite_border,
+                            color: Colors.pinkAccent,
+                          ),
+                          onPressed: () {
+                            _spotController.setIsFavorite(true);
+                          },
+                        )),
           subtitle: Text(
             _spotController.modelSelected?.description,
             style: GoogleFonts.nunito(

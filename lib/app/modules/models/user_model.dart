@@ -4,15 +4,23 @@ class UserModel {
   final String email;
   final String photoUrl;
   final String uid;
+  final bool isAnonymous;
 
-  UserModel({this.id, this.fullName, this.email, this.photoUrl, this.uid});
+  UserModel(
+      {this.id,
+      this.fullName,
+      this.email,
+      this.photoUrl,
+      this.uid,
+      this.isAnonymous});
 
   UserModel.fromJson(Map<String, dynamic> data)
       : id = data['id'],
         fullName = data['fullName'],
         email = data['email'],
         photoUrl = data['photoUrl'],
-        uid = data['uid'];
+        uid = data['uid'],
+        isAnonymous = data['isAnonymous'];
 
   Map<String, dynamic> toJson() {
     return {
@@ -21,6 +29,7 @@ class UserModel {
       'email': email,
       'photoUrl': photoUrl,
       'uid': uid,
+      'isAnonymous': isAnonymous,
     };
   }
 }
