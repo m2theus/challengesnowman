@@ -25,7 +25,6 @@ class NewSpotModal extends StatefulWidget {
 }
 
 class _NewSpotModalState extends State<NewSpotModal> {
-  TextEditingController _categoriesController = TextEditingController();
   TextEditingController _nameController = TextEditingController();
   TextEditingController _locationController = TextEditingController();
   TextEditingController _pinController = TextEditingController();
@@ -36,7 +35,6 @@ class _NewSpotModalState extends State<NewSpotModal> {
   PlaceSpot _locationSelected;
 
   Timer _throttle;
-  List<String> _placesList = [];
   @override
   void initState() {
     _spotController.getCategories();
@@ -172,14 +170,11 @@ class _NewSpotModalState extends State<NewSpotModal> {
                   )
                 : SingleChildScrollView(
                     child: Column(
-                      children: <Widget>[
-                        formContentModal()
-                      ],
+                      children: <Widget>[formContentModal()],
                     ),
                   );
           },
         ));
-
   }
 
   formContentModal() {
@@ -189,56 +184,44 @@ class _NewSpotModalState extends State<NewSpotModal> {
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: <Widget>[
           InputField(
-                  (value) => value.isEmpty
-                  ? "Campo obrigatório"
-                  : null,
-              "Name",
+              (value) => value.isEmpty ? "Campo obrigatório" : null, "Name",
               controller: _nameController),
-          InputDropdown(_spotController.categories,
-              "Categories", dropdownValue, (value) {
-                if (value == null && dropdownValue == null) {
-                  return "Campo obrigatório";
-                }
-              }, (value) {
-                setState(() {
-                  dropdownValue = value;
-                });
-              }),
+          InputDropdown(_spotController.categories, "Categories", dropdownValue,
+              (value) {
+            if (value == null && dropdownValue == null) {
+              return "Campo obrigatório";
+            }
+          }, (value) {
+            setState(() {
+              dropdownValue = value;
+            });
+          }),
           Padding(
             child: TypeAheadField(
-              textFieldConfiguration:
-              TextFieldConfiguration(
+              textFieldConfiguration: TextFieldConfiguration(
                   controller: _locationController,
                   decoration: InputDecoration(
-                    hintStyle:
-                    TextStyle(color: Colors.grey),
-                    labelStyle: TextStyle(
-                        color: Colors.grey[400]),
+                    hintStyle: TextStyle(color: Colors.grey),
+                    labelStyle: TextStyle(color: Colors.grey[400]),
                     hintText: "Location",
                     labelText: "Location",
                     border: OutlineInputBorder(
-                      borderSide: BorderSide(
-                          color: Colors.grey[400],
-                          width: 1.0),
+                      borderSide:
+                          BorderSide(color: Colors.grey[400], width: 1.0),
                     ),
                     enabledBorder: OutlineInputBorder(
-                      borderSide: BorderSide(
-                          color: Colors.grey[400],
-                          width: 1.0),
+                      borderSide:
+                          BorderSide(color: Colors.grey[400], width: 1.0),
                     ),
                     focusedBorder: OutlineInputBorder(
-                        borderSide: BorderSide(
-                            color: Colors.grey[400],
-                            width: 1.0)),
+                        borderSide:
+                            BorderSide(color: Colors.grey[400], width: 1.0)),
                     errorBorder: OutlineInputBorder(
-                      borderSide: BorderSide(
-                          color: Colors.red,
-                          width: 1.0),
+                      borderSide: BorderSide(color: Colors.red, width: 1.0),
                     ),
                   )),
               suggestionsCallback: (pattern) async {
-                return await _spotController
-                    .getLocationResults(pattern);
+                return await _spotController.getLocationResults(pattern);
               },
               itemBuilder: (context, suggestion) {
                 return ListTile(
@@ -247,28 +230,24 @@ class _NewSpotModalState extends State<NewSpotModal> {
               },
               onSuggestionSelected: (suggestion) {
                 _locationSelected = suggestion;
-                _locationController.text =
-                    suggestion.description;
+                _locationController.text = suggestion.description;
               },
             ),
-            padding: EdgeInsets.only(
-                left: 20, right: 20, top: 20),
+            padding: EdgeInsets.only(left: 20, right: 20, top: 20),
           ),
           InputField(
-                (value) =>
-            value.isEmpty ? "Campo obrigatório" : null,
+            (value) => value.isEmpty ? "Campo obrigatório" : null,
             "Pin color",
             controller: _pinController,
             onTap: () => _colorPicker(context),
             isColorInput: true,
-            colorInputCircle: _pinController.text != null &&
-                _pinController.text != ''
-                ? Hexcolor(_pinController.text)
-                : null,
+            colorInputCircle:
+                _pinController.text != null && _pinController.text != ''
+                    ? Hexcolor(_pinController.text)
+                    : null,
           ),
           Padding(
-            padding: EdgeInsets.only(
-                left: 20, right: 20, top: 20),
+            padding: EdgeInsets.only(left: 20, right: 20, top: 20),
             child: ButtonCustom(
               onTap: () {
                 if (validate()) {
@@ -282,8 +261,7 @@ class _NewSpotModalState extends State<NewSpotModal> {
                 }
               },
               label: "Add spot",
-              width:
-              MediaQuery.of(context).size.width * 0.70,
+              width: MediaQuery.of(context).size.width * 0.70,
               color: Colors.yellow[600],
               colorLabel: Theme.of(context).primaryColor,
               margin: EdgeInsets.only(top: 40),

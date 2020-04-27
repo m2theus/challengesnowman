@@ -3,10 +3,8 @@ import 'package:challengesnowman/app/modules/models/user_model.dart';
 import 'package:challengesnowman/app/modules/tabs/map/components/spot/new_spot.dart';
 import 'package:challengesnowman/app/services/shared_preferences_service.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter_typeahead/flutter_typeahead.dart';
 import 'package:get/get.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 
 import '../tab_map_controller.dart';

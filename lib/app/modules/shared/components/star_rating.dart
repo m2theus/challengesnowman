@@ -86,8 +86,8 @@ class StarRating extends StatelessWidget {
           splashColor: Colors.transparent,
           onPressed: onChanged != null
               ? () {
-            onChanged(value == index + 1 ? index : index + 1);
-          }
+                  onChanged(value == index + 1 ? index : index + 1);
+                }
               : null,
         );
       }),

@@ -8,7 +8,8 @@ class InputField extends StatelessWidget {
       this.typePassword = false,
       this.onTap,
       this.isColorInput = false,
-      this.colorInputCircle, this.maxLines = 1 });
+      this.colorInputCircle,
+      this.maxLines = 1});
 
   var controller;
   var validator;

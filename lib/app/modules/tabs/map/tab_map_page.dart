@@ -1,4 +1,3 @@
-import 'package:challengesnowman/app/modules/shared/custom_scroll_behavior.dart';
 import 'package:challengesnowman/app/modules/tabs/map/components/spot/components/info_spot/infos_spot.dart';
 import 'package:challengesnowman/app/modules/tabs/map/components/searchbox.dart';
 import 'package:challengesnowman/app/modules/tabs/map/tab_map_controller.dart';
@@ -18,9 +17,6 @@ class TabMapPage extends StatefulWidget {
 class _TabMapPageState extends State<TabMapPage>
     with SingleTickerProviderStateMixin {
   LatLng _positionAtual;
-  AnimationController _animationController;
-  Duration _duration = Duration(milliseconds: 500);
-  Tween<Offset> _tween = Tween(begin: Offset(0, 1), end: Offset(0, 0));
   final _tabMapController = Provider.of<TabMapController>(Get.context);
 
   _getUserPosition() async {
@@ -37,8 +33,6 @@ class _TabMapPageState extends State<TabMapPage>
       _tabMapController.populateSpots();
       _tabMapController.showLoading(false);
     });
-    _tabMapController.animationController =
-        AnimationController(vsync: this, duration: _duration);
   }
 
   @override
@@ -87,11 +81,5 @@ class _TabMapPageState extends State<TabMapPage>
               );
       },
     ));
-  }
-
-  _animationHandler() {
-    if (_animationController.isDismissed) {
-      _animationController.forward();
-    }
   }
 }

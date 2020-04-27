@@ -26,7 +26,9 @@ class LoginButton extends StatelessWidget {
           child: SizedBox(
             height: 60,
             child: InkWell(
-              onTap: () => isSignInButton ? _loginController.login() : _loginController.signUp(),
+              onTap: () => isSignInButton
+                  ? _loginController.login()
+                  : _loginController.signUp(),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: <Widget>[

@@ -1,7 +1,6 @@
 import 'dart:async';
 
 import 'package:challengesnowman/app/modules/models/spot_model.dart';
-import 'package:challengesnowman/app/services/authorization.dart';
 import 'package:challengesnowman/app/services/firebase_provider.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
@@ -34,10 +33,6 @@ abstract class _TabMapBase with Store {
   @observable
   LatLng positionAtual;
 
-  AnimationController animationController;
-  Duration _duration = Duration(milliseconds: 500);
-
-  final _auth = Auth();
   final fireStoreProvider = FirebaseProvider();
 
   @action
@@ -107,11 +102,5 @@ abstract class _TabMapBase with Store {
       setMarkers(markers);
       showLoading(false);
     });
-  }
-
-  _animationHandler() {
-    if (animationController.isDismissed) {
-      animationController.forward();
-    }
   }
 }

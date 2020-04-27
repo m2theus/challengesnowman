@@ -6,14 +6,13 @@ class TextTitlesLogin extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Wrap(
-
       alignment: WrapAlignment.center,
       direction: Axis.vertical,
-      spacing: -16,
+      spacing: -20,
       children: <Widget>[
         Text(
           'SNOW',
-          style: GoogleFonts.roboto(
+          style: GoogleFonts.nunito(
             textStyle: TextStyle(
                 fontSize: 40,
                 color: Theme.of(context).primaryColor,
@@ -22,7 +21,7 @@ class TextTitlesLogin extends StatelessWidget {
         ),
         Text(
           'MAN',
-          style: GoogleFonts.roboto(
+          style: GoogleFonts.nunito(
             textStyle: TextStyle(
                 fontSize: 52,
                 color: Theme.of(context).primaryColor,
@@ -31,16 +30,16 @@ class TextTitlesLogin extends StatelessWidget {
         ),
         Text(
           'LABS',
-          style: GoogleFonts.rubik(
-            textStyle: GoogleFonts.rubik(
-              textStyle: TextStyle(
-                  fontSize: 43,
-                  color: Theme.of(context).primaryColor,
-                  fontWeight: FontWeight.w900),
-            ),
+          style: GoogleFonts.nunito(
+            textStyle: TextStyle(
+                fontSize: 43,
+                color: Theme.of(context).primaryColor,
+                fontWeight: FontWeight.w900),
           ),
         ),
-        SizedBox(height: 40,),
+        SizedBox(
+          height: 40,
+        ),
         Text(
           'Challenge',
           style: GoogleFonts.rubik(

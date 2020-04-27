@@ -10,7 +10,6 @@ import 'package:challengesnowman/app/services/firebase_provider.dart';
 import 'package:challengesnowman/app/services/shared_preferences_service.dart';
 import 'package:dio/dio.dart';
 import 'package:firebase_storage/firebase_storage.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:mobx/mobx.dart';
